@@ -13,7 +13,7 @@ export default function Index() {
   const { user } = useLoaderData();
   return (
     <div>
-      <h1>Welcome</h1>
+      <h1 className="text-pink-700 text-4xl">Welcome</h1>
       <nav>
         <ul>
           <li>
