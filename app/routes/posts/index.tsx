@@ -14,14 +14,15 @@ export const loader = async () => {
 
 export default function NewPost() {
   const { posts } = useLoaderData();
+  console.log(posts);
   return (
     <div>
       <p>Posts</p>
       <Link to="/posts/new">New Post</Link>
       <ul>
         {posts.map((post: any) => (
-          <li key={post.id}>
-            <Link to={post.id}>
+          <li key={`${post.id}`}>
+            <Link to={`${post.id}`}>
               <h3>{post.title}</h3>
               {new Date(post.createdAt).toLocaleString()}
             </Link>
