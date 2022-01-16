@@ -19,6 +19,8 @@ export const action = async ({ request }: { request: any }) => {
   const title = form.get("title");
   const body = form.get("body");
   const user = await getUser(request);
+  console.log("request in new", request);
+  console.log("user in new", user);
 
   const fields = { title, body };
 

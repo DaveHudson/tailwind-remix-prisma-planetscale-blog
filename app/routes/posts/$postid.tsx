@@ -6,7 +6,7 @@ export const loader = async ({ request, params }: { request: Request; params: an
   const user = await getUser(request);
 
   const post = await db.post.findUnique({
-    where: { id: params.postid },
+    where: { id: Number(params.postid) },
   });
 
   if (!post) throw new Error("Post not found");
@@ -22,13 +22,13 @@ export const action = async ({ request, params }: { request: any; params: any })
     const user = await getUser(request);
 
     const post = await db.post.findUnique({
-      where: { id: params.postid },
+      where: { id: Number(params.postid) },
     });
 
     if (!post) throw new Error("Post not found");
 
     if (user && post.userId === user.id) {
-      await db.post.delete({ where: { id: params.postid } });
+      await db.post.delete({ where: { id: Number(params.postid) } });
     }
 
     return redirect("/posts");

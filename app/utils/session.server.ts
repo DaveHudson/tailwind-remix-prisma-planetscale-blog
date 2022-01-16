@@ -20,6 +20,8 @@ export async function login({ username, password }: loginType) {
 
   if (!isCorrectPassword) return null;
 
+  console.log("user log in", user);
+
   return user;
 }
 
@@ -74,7 +76,7 @@ export function getUserSession(request: Request) {
 export async function getUser(request: Request) {
   const session = await getUserSession(request);
   const userId = session.get("userId");
-  if (!userId || typeof userId !== "string") {
+  if (!userId || typeof userId !== "number") {
     return null;
   }
 
