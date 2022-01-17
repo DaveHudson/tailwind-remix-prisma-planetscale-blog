@@ -111,7 +111,7 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
 }
 
 function Layout({ children }: { children: React.ReactNode }) {
-  const { user } = useLoaderData();
+  const user = useLoaderData();
 
   return (
     <div className="remix-app">
