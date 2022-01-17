@@ -24,13 +24,9 @@ export const loader: LoaderFunction = async () => {
 export default function Posts() {
   const { posts } = useLoaderData();
 
-  //console.log(posts);
-
   return (
     <div className="mt-12 grid gap-16 pt-12 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-12">
       {posts.map((post: PostWithUser) => {
-        console.log(post);
-
         return (
           <div key={post.title}>
             <div>
@@ -38,27 +34,26 @@ export default function Posts() {
                 <span>{post.category}</span>
               </a>
             </div>
-            <a href={`${post.id}`} className="block mt-4">
+            <Link to={`${post.id}`} className="block mt-4">
               <p className="text-xl font-semibold text-gray-900">{post.title}</p>
               <p className="mt-3 text-base text-gray-500">{post.body}</p>
-            </a>
+            </Link>
             <div className="mt-6 flex items-center">
               <div className="flex-shrink-0">
-                <a href={`${post.userId}`}>
+                <Link to={`${post.userId}`}>
                   <span className="sr-only">{post.user.name}</span>
                   <img
                     className="h-10 w-10 rounded-full"
                     src={`${post.user.profileUrl}`}
                     alt={post.user.name || "user profile photo"}
                   />
-                </a>
+                </Link>
               </div>
               <div className="ml-3">
                 <p className="text-sm font-medium text-gray-900">
-                  <a href={`${post}`}>{post.title}</a>
+                  <Link to={`/user/${post.userId}`}>{post.title}</Link>
                 </p>
                 <div className="flex space-x-1 text-sm text-gray-500">
-                  {/* <time dateTime={post.createdAt.toString()}>{post.createdAt}</time> */}
                   <span>{dayjs(post.createdAt).format("MMM D, YYYY")}</span>
                   <span aria-hidden="true">&middot;</span>
                   <span>{post.readingTime} read</span>
@@ -70,21 +65,4 @@ export default function Posts() {
       })}
     </div>
   );
-
-  // return (
-  //   <div>
-  //     <p>Posts</p>
-  //     <Link to="/posts/new">New Post</Link>
-  //     <ul>
-  //       {posts.map((post: Post) => (
-  //         <li key={`${post.id}`}>
-  //           <Link to={`${post.id}`}>
-  //             <h3>{post.title}</h3>
-  //             {new Date(post.createdAt).toLocaleString()}
-  //           </Link>
-  //         </li>
-  //       ))}
-  //     </ul>
-  //   </div>
-  // );
 }
