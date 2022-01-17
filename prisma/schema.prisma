@@ -16,20 +16,30 @@ model User {
   id           Int      @id @default(autoincrement())
   username     String   @unique
   passwordHash String
+  name         String?
+  profileUrl   String?
   posts        Post[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
 
+enum Category {
+  ARTICLE
+  CASE_STUDY
+  VIDEO
+}
+
 model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  body      String   @db.Text
-  imageUrl  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          Int      @id @default(autoincrement())
+  title       String
+  body        String   @db.Text
+  imageUrl    String?
+  category    Category @default(ARTICLE)
+  readingTime String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }

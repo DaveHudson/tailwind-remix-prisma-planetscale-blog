@@ -1,7 +1,9 @@
 import { Link, useLoaderData } from "remix";
+import type { LoaderFunction } from "remix";
 import { db } from "~/utils/db.server";
+import { Post } from "@prisma/client";
 
-export const loader = async () => {
+export const loader: LoaderFunction = async () => {
   const data = {
     posts: await db.post.findMany({
       take: 20,
@@ -20,7 +22,7 @@ export default function NewPost() {
       <p>Posts</p>
       <Link to="/posts/new">New Post</Link>
       <ul>
-        {posts.map((post: any) => (
+        {posts.map((post: Post) => (
           <li key={`${post.id}`}>
             <Link to={`${post.id}`}>
               <h3>{post.title}</h3>

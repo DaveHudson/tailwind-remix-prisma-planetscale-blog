@@ -1,4 +1,5 @@
 import { Link, redirect, useActionData, json } from "remix";
+import type { ActionFunction } from "remix";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 
@@ -14,13 +15,24 @@ function validateBody(body: string) {
   }
 }
 
-export const action = async ({ request }: { request: any }) => {
+export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
   const title = form.get("title");
   const body = form.get("body");
   const user = await getUser(request);
   console.log("request in new", request);
   console.log("user in new", user);
+
+  if (!user?.id) {
+    throw new Error("User does not exist");
+  }
+
+  if (typeof title !== "string") {
+    throw new Error(`Form not submmitted correctly`);
+  }
+  if (typeof body !== "string") {
+    throw new Error(`Form not submmitted correctly`);
+  }
 
   const fields = { title, body };
 
@@ -34,8 +46,7 @@ export const action = async ({ request }: { request: any }) => {
     return json({ fieldErrors, fields }, { status: 400 });
   }
 
-  // @ts-ignore
-  const post = await db.post.create({ data: { ...fields, userId: user?.id } });
+  const post = await db.post.create({ data: { ...fields, userId: user.id } });
 
   return redirect(`/posts/${post.id}`);
 };

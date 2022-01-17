@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Category } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function seed() {
@@ -7,6 +7,9 @@ async function seed() {
       username: "David",
       // this is a hashed version of "twixrox"
       passwordHash: "$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu/1u",
+      name: "Dave",
+      profileUrl:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
     },
   });
 
@@ -23,10 +26,12 @@ seed();
 function getPosts() {
   return [
     {
-      title: "Post 1",
-      body: "This is a test post seeded, this one is very long and hopefully should break the seed script running because the type of field will not accept long values. I think 191 was the maximum so lets make sure this is looooooooooongeeeeeeeeer that that!",
+      title: "Boost your conversion rate",
+      body: "Nullam risus blandit ac aliquam justo ipsum. Quam mauris volutpat massa dictumst amet. Sapien tortor lacus arcu.",
+      category: Category.ARTICLE,
+      readingTime: "3 min read",
     },
-    { title: "Post 2", body: "This is a test post seeded" },
-    { title: "Post 3", body: "This is a test post seeded" },
+    { title: "Post 2", body: "This is a test post seeded", category: Category.ARTICLE, readingTime: "1 min read" },
+    { title: "Post 3", body: "This is a test post seeded", category: Category.CASE_STUDY, readingTime: "2 min read" },
   ];
 }

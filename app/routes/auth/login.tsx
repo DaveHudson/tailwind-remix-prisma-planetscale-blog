@@ -21,12 +21,20 @@ export const action = async ({ request }: { request: Request }) => {
   const username = form.get("username");
   const password = form.get("password");
 
+  if (typeof loginType !== "string") {
+    throw new Error(`Form not submmitted correctly`);
+  }
+  if (typeof username !== "string") {
+    throw new Error(`Form not submmitted correctly`);
+  }
+  if (typeof password !== "string") {
+    throw new Error(`Form not submmitted correctly`);
+  }
+
   const fields = { loginType, username, password };
 
   const fieldErrors = {
-    // @ts-ignore
     username: validateUsername(username),
-    // @ts-ignore
     password: validatePassword(password),
   };
 
@@ -38,21 +46,19 @@ export const action = async ({ request }: { request: Request }) => {
   switch (loginType) {
     case "login": {
       // Find user
-      // @ts-ignore
       const user = await login({ username, password });
       // Check user
       if (!user) {
         return json({ ...fields, fieldErrors: { username: "Invalid credentials" } });
       }
+
       // Create user session
       return createUserSession(user.id, "/posts");
     }
     case "register": {
       // Check if user exists
-
       const userExists = await db.user.findFirst({
         where: {
-          // @ts-ignore
           username,
         },
       });
@@ -62,7 +68,7 @@ export const action = async ({ request }: { request: Request }) => {
       }
 
       // Create user
-      // @ts-ignore
+
       const user = await register({ username, password });
 
       if (!user) {

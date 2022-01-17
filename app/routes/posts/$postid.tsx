@@ -1,8 +1,9 @@
 import { useLoaderData, Link, useParams, redirect } from "remix";
+import type { ActionFunction, LoaderFunction } from "remix";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 
-export const loader = async ({ request, params }: { request: Request; params: any }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUser(request);
 
   const post = await db.post.findUnique({
@@ -15,7 +16,7 @@ export const loader = async ({ request, params }: { request: Request; params: an
   return data;
 };
 
-export const action = async ({ request, params }: { request: any; params: any }) => {
+export const action: ActionFunction = async ({ request, params }) => {
   const form = await request.formData();
 
   if (form.get("_method") === "delete") {
