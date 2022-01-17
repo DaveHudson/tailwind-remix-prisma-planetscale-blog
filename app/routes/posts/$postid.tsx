@@ -44,7 +44,7 @@ export default function Post() {
       <p>{post.body}</p>
       <Link to="/posts">Back</Link>
 
-      {user.id === post.userId && (
+      {user?.id === post.userId && (
         <form method="POST">
           <input type="hidden" name="_method" value="delete" />
           <button type="submit">Delete</button>
