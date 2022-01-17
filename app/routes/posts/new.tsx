@@ -20,8 +20,6 @@ export const action: ActionFunction = async ({ request }) => {
   const title = form.get("title");
   const body = form.get("body");
   const user = await getUser(request);
-  console.log("request in new", request);
-  console.log("user in new", user);
 
   if (!user?.id) {
     throw new Error("User does not exist");
@@ -42,7 +40,6 @@ export const action: ActionFunction = async ({ request }) => {
   };
 
   if (Object.values(fieldErrors).some(Boolean)) {
-    console.log(fieldErrors);
     return json({ fieldErrors, fields }, { status: 400 });
   }
 

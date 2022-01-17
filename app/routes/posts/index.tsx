@@ -1,32 +1,18 @@
 import { Link, useLoaderData } from "remix";
 import type { LoaderFunction } from "remix";
-import { db } from "~/utils/db.server";
-import { Post, User } from "@prisma/client";
 import dayjs from "dayjs";
-
-interface PostWithUser extends Post {
-  user: User;
-}
+import { getPosts, PostWithUser } from "~/utils/db/post.server";
 
 export const loader: LoaderFunction = async () => {
-  const data = {
-    posts: await db.post.findMany({
-      take: 20,
-      orderBy: { createdAt: "desc" },
-      include: {
-        user: true,
-      },
-    }),
-  };
-  return data;
+  return getPosts();
 };
 
 export default function Posts() {
-  const { posts } = useLoaderData();
+  const posts = useLoaderData<PostWithUser[]>();
 
   return (
     <div className="mt-12 grid gap-16 pt-12 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-12">
-      {posts.map((post: PostWithUser) => {
+      {posts.map((post) => {
         return (
           <div key={post.title}>
             <div>

@@ -21,8 +21,6 @@ export async function login({ username, password }: loginType) {
 
   if (!isCorrectPassword) return null;
 
-  console.log("user log in", user);
-
   return user;
 }
 

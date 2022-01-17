@@ -39,7 +39,6 @@ export const action = async ({ request }: { request: Request }) => {
   };
 
   if (Object.values(fieldErrors).some(Boolean)) {
-    console.log(fieldErrors);
     return json({ fieldErrors, fields }, { status: 400 });
   }
 

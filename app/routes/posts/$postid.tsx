@@ -2,15 +2,15 @@ import { useLoaderData, Link, useParams, redirect } from "remix";
 import type { ActionFunction, LoaderFunction } from "remix";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
+import { getPost } from "~/utils/db/post.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUser(request);
 
-  const post = await db.post.findUnique({
-    where: { id: Number(params.postid) },
-  });
+  const postid = params.postid;
 
-  if (!post) throw new Error("Post not found");
+  if (!postid) throw new Error("Post param not found");
+  const post = await getPost({ postid });
 
   const data = { post, user };
   return data;
