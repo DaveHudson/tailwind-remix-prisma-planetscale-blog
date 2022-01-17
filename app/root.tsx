@@ -187,6 +187,7 @@ function Layout({ children }: { children: React.ReactNode }) {
                               <Link
                                 to={item.href}
                                 className={`${active ? "bg-gray-100" : ""} block py-2 px-4 text-sm text-gray-700`}
+                                prefetch="intent"
                               >
                                 {item.name}
                               </Link>
@@ -202,7 +203,9 @@ function Layout({ children }: { children: React.ReactNode }) {
                     </Transition>
                   </Menu>
                 ) : (
-                  <Link to="/auth/login">Login</Link>
+                  <Link to="/auth/login" prefetch="intent">
+                    Login
+                  </Link>
                 )}
               </div>
             </div>
@@ -215,6 +218,7 @@ function Layout({ children }: { children: React.ReactNode }) {
                     item.current ? "bg-gray-100 text-gray-900" : "text-gray-900 hover:bg-gray-50 hover:text-gray-900"
                   } rounded-md py-2 px-3 inline-flex items-center text-sm font-medium`}
                   aria-current={item.current ? "page" : undefined}
+                  prefetch="intent"
                 >
                   {item.name}
                 </Link>

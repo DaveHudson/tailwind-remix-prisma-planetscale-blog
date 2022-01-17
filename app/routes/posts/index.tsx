@@ -20,13 +20,13 @@ export default function Posts() {
                 <span>{post.category}</span>
               </a>
             </div>
-            <Link to={`${post.id}`} className="block mt-4">
+            <Link to={`${post.id}`} className="block mt-4" prefetch="intent">
               <p className="text-xl font-semibold text-gray-900">{post.title}</p>
               <p className="mt-3 text-base text-gray-500">{post.body}</p>
             </Link>
             <div className="mt-6 flex items-center">
               <div className="flex-shrink-0">
-                <Link to={`${post.userId}`}>
+                <Link to={`${post.userId}`} prefetch="intent">
                   <span className="sr-only">{post.user.name}</span>
                   <img
                     className="h-10 w-10 rounded-full"
@@ -37,7 +37,9 @@ export default function Posts() {
               </div>
               <div className="ml-3">
                 <p className="text-sm font-medium text-gray-900">
-                  <Link to={`/user/${post.userId}`}>{post.title}</Link>
+                  <Link to={`/user/${post.userId}`} prefetch="intent">
+                    {post.title}
+                  </Link>
                 </p>
                 <div className="flex space-x-1 text-sm text-gray-500">
                   <span>{dayjs(post.createdAt).format("MMM D, YYYY")}</span>
