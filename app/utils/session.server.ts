@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { db } from "./db.server";
 import { createCookieSessionStorage, redirect } from "remix";
+import { User } from "@prisma/client";
 
 type loginType = {
   username: string;
@@ -81,11 +82,11 @@ export async function getUser(request: Request) {
   }
 
   try {
-    const user = await db.user.findUnique({
+    const user = (await db.user.findUnique({
       where: {
         id: userId,
       },
-    });
+    })) as User;
 
     return user;
   } catch (error) {
