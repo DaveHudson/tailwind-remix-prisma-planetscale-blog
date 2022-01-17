@@ -4,6 +4,7 @@ import {
   LiveReload,
   LoaderFunction,
   Meta,
+  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -211,17 +212,19 @@ function Layout({ children }: { children: React.ReactNode }) {
             </div>
             <nav className="hidden lg:py-2 lg:flex lg:space-x-8" aria-label="Global">
               {navigation.map((item) => (
-                <Link
+                <NavLink
                   key={item.name}
                   to={item.href}
-                  className={`${
-                    item.current ? "bg-gray-100 text-gray-900" : "text-gray-900 hover:bg-gray-50 hover:text-gray-900"
-                  } rounded-md py-2 px-3 inline-flex items-center text-sm font-medium`}
+                  className={({ isActive }) =>
+                    `${
+                      isActive ? "bg-gray-100 text-gray-900" : "text-gray-900 hover:bg-gray-50 hover:text-gray-900"
+                    } rounded-md py-2 px-3 inline-flex items-center text-sm font-medium`
+                  }
                   aria-current={item.current ? "page" : undefined}
                   prefetch="intent"
                 >
                   {item.name}
-                </Link>
+                </NavLink>
               ))}
             </nav>
             {children}
