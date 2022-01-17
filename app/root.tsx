@@ -1,15 +1,4 @@
-import {
-  Link,
-  Links,
-  LiveReload,
-  LoaderFunction,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useCatch,
-  useLoaderData,
-} from "remix";
+import { Link, Links, LiveReload, LoaderFunction, Meta, Outlet, Scripts, ScrollRestoration, useCatch } from "remix";
 import type { MetaFunction, LinksFunction } from "remix";
 import { getUser } from "~/utils/session.server";
 import styles from "./tailwind.css";
@@ -111,8 +100,6 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
 }
 
 function Layout({ children }: { children: React.ReactNode }) {
-  const { user } = useLoaderData();
-
   return (
     <div className="remix-app">
       <header className="remix-app__header">
@@ -122,7 +109,10 @@ function Layout({ children }: { children: React.ReactNode }) {
               <li>
                 <Link to="posts">Posts</Link>
               </li>
-              {user ? (
+              <li>
+                <Link to="/auth/login">Login</Link>
+              </li>
+              {/* {user ? (
                 <li>
                   <form action="/auth/logout" method="POST">
                     <button type="submit">Logout {user.username}</button>
@@ -132,7 +122,7 @@ function Layout({ children }: { children: React.ReactNode }) {
                 <li>
                   <Link to="/auth/login">Login</Link>
                 </li>
-              )}
+              )} */}
             </ul>
           </nav>
         </div>
