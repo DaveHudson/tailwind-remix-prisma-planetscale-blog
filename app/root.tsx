@@ -1,4 +1,15 @@
-import { Link, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch, useLoaderData } from "remix";
+import {
+  Link,
+  Links,
+  LiveReload,
+  LoaderFunction,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useCatch,
+  useLoaderData,
+} from "remix";
 import type { MetaFunction, LinksFunction } from "remix";
 import { getUser } from "~/utils/session.server";
 import styles from "./tailwind.css";
@@ -11,10 +22,14 @@ export const meta: MetaFunction = () => {
   return { title: "New Remix App" };
 };
 
-export const loader = async ({ request }: { request: Request }) => {
+export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request);
+
+  if (!user) {
+    return null;
+  }
   const data = {
-    user,
+    user: user || null,
   };
   return data;
 };
