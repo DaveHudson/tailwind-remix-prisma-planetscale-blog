@@ -2,6 +2,7 @@ import { Link, redirect, useActionData, json } from "remix";
 import type { ActionFunction } from "remix";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
+import invariant from "tiny-invariant";
 
 function validateTitle(title: string) {
   if (typeof title !== "string" || title.length < 3) {
@@ -21,9 +22,7 @@ export const action: ActionFunction = async ({ request }) => {
   const body = form.get("body");
   const user = await getUser(request);
 
-  if (!user?.id) {
-    throw new Error("User does not exist");
-  }
+  invariant(user?.id, "expected user id");
 
   if (typeof title !== "string") {
     throw new Error(`Form not submmitted correctly`);

@@ -1,5 +1,5 @@
 import { SearchIcon } from "@heroicons/react/solid";
-import { useSearchParams } from "remix";
+import { Form, useSearchParams } from "remix";
 
 export default function Search() {
   let [searchParams] = useSearchParams();
@@ -9,7 +9,7 @@ export default function Search() {
 
   return (
     <div className="w-full sm:max-w-xs">
-      <form>
+      <Form reloadDocument method="get">
         <label htmlFor="search" className="sr-only">
           Search
         </label>
@@ -26,7 +26,7 @@ export default function Search() {
             defaultValue={searchQuery}
           />
         </div>
-      </form>
+      </Form>
     </div>
   );
 }

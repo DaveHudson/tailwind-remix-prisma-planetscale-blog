@@ -3,13 +3,14 @@ import type { ActionFunction, LoaderFunction } from "remix";
 import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
 import { getPost } from "~/utils/db/post.server";
+import invariant from "tiny-invariant";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
+  invariant(params.postid, "expected params.postid");
+
   const user = await getUser(request);
 
   const postid = params.postid;
-
-  if (!postid) throw new Error("Post param not found");
   const post = await getPost({ postid });
 
   const data = { post, user };
