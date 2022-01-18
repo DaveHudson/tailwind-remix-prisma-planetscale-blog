@@ -1,8 +1,7 @@
 import { useLoaderData, Link, useParams, redirect } from "remix";
 import type { ActionFunction, LoaderFunction } from "remix";
-import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
-import { getPost } from "~/utils/db/post.server";
+import { deletePost, getPost } from "~/utils/db/post.server";
 import invariant from "tiny-invariant";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -11,7 +10,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await getUser(request);
 
   const postid = params.postid;
-  const post = await getPost({ postid });
+  const post = await getPost(Number(postid));
 
   const data = { post, user };
   return data;
@@ -20,17 +19,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }) => {
   const form = await request.formData();
 
+  // Check for delete methos
   if (form.get("_method") === "delete") {
+    // Get user from cookie
     const user = await getUser(request);
 
-    const post = await db.post.findUnique({
-      where: { id: Number(params.postid) },
-    });
+    // Get post from db
+    const { postid } = params;
+    const post = await getPost(Number(postid));
 
     if (!post) throw new Error("Post not found");
 
+    // delete ONLY if post created by logged in user
     if (user && post.userId === user.id) {
-      await db.post.delete({ where: { id: Number(params.postid) } });
+      await deletePost(Number(params.postid));
     }
 
     return redirect("/posts");

@@ -16,9 +16,9 @@ export async function getPosts() {
   return posts as PostWithUser[];
 }
 
-export async function getPost({ postid }: { postid: string }) {
+export async function getPost(postid: number) {
   const post = await db.post.findUnique({
-    where: { id: Number(postid) },
+    where: { id: postid },
     include: {
       user: true,
     },
@@ -32,4 +32,9 @@ export async function getPost({ postid }: { postid: string }) {
 export async function createPost(fields: Post) {
   const res = await db.post.create({ data: { ...fields, userId: fields.userId } });
   return res.id;
+}
+
+export async function deletePost(postid: number) {
+  const res = await db.post.delete({ where: { id: postid } });
+  return res;
 }
