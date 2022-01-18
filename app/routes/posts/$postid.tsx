@@ -1,4 +1,4 @@
-import { useLoaderData, Link, useParams, redirect } from "remix";
+import { useLoaderData, Link, useParams, redirect, useTransition, Form } from "remix";
 import type { ActionFunction, LoaderFunction } from "remix";
 import { getUser } from "~/utils/session.server";
 import { deletePost, getPost } from "~/utils/db/post.server";
@@ -41,6 +41,8 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function Post() {
   const { post, user } = useLoaderData();
+  const transition = useTransition();
+
   return (
     <div>
       <h1>{post.title}</h1>
@@ -48,10 +50,15 @@ export default function Post() {
       <Link to="/posts">Back</Link>
 
       {user?.id === post.userId && (
-        <form method="POST">
+        <Form method="post">
           <input type="hidden" name="_method" value="delete" />
-          <button type="submit">Delete</button>
-        </form>
+          <button
+            type="submit"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            {transition.state !== "idle" ? "Deleting.." : "Delete"}
+          </button>
+        </Form>
       )}
     </div>
   );
