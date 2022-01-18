@@ -42,7 +42,9 @@ const navigation = [
   { name: "Posts", href: "/posts", current: false },
   { name: "Projects", href: "/projects", current: false },
 ];
+
 const userNavigation = [
+  { name: "New Post", href: "/posts/new" },
   { name: "Your Profile", href: "#" },
   { name: "Settings", href: "#" },
 ];
