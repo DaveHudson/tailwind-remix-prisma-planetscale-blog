@@ -1,7 +1,7 @@
-import { Link, redirect, useActionData, json, Form } from "remix";
+import { Link, redirect, useActionData, json, Form, useTransition } from "remix";
 import type { ActionFunction } from "remix";
 import { getUser } from "~/utils/session.server";
-import { createPost, CreatePostInputType } from "~/utils/db/post.server";
+import { createPost } from "~/utils/db/post.server";
 import { Category, Post } from "@prisma/client";
 import { ExclamationCircleIcon } from "@heroicons/react/solid";
 import invariant from "tiny-invariant";
@@ -58,8 +58,11 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect(`/posts`);
 };
 
+// TODO: Create input & button components with Storybook
+
 export default function NewPost() {
   const actionData = useActionData();
+  const transition = useTransition();
 
   return (
     <div>
@@ -67,7 +70,7 @@ export default function NewPost() {
       <Link to="/posts">Back</Link>
 
       <Form method="post">
-        <div>
+        <fieldset disabled={transition.state === "submitting"}>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
             Title
           </label>
@@ -94,40 +97,40 @@ export default function NewPost() {
           <p className="mt-2 text-sm text-red-600" id="title-error">
             {actionData?.errors.title && actionData?.errors.title}
           </p>
-        </div>
 
-        <div>
-          <label htmlFor="body" className="block text-sm font-medium text-gray-700">
-            Add your post body
-          </label>
-          <div className="mt-1">
-            <textarea
-              rows={4}
-              name="body"
-              id="body"
-              className={`${
-                actionData?.errors.title
-                  ? "block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
-                  : "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              }`}
-              defaultValue={actionData?.fields?.body}
-            />
+          <div>
+            <label htmlFor="body" className="block text-sm font-medium text-gray-700">
+              Add your post body
+            </label>
+            <div className="mt-1">
+              <textarea
+                rows={4}
+                name="body"
+                id="body"
+                className={`${
+                  actionData?.errors.title
+                    ? "block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                    : "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                }`}
+                defaultValue={actionData?.fields?.body}
+              />
+            </div>
+            <p className="mt-2 text-sm text-red-600" id="body-error">
+              {actionData?.errors.body && actionData?.errors.body}
+            </p>
           </div>
-          <p className="mt-2 text-sm text-red-600" id="body-error">
-            {actionData?.errors.body && actionData?.errors.body}
+
+          <p className="mt-2 text-sm text-red-600" id="userid-error">
+            {actionData?.errors.userId && actionData?.errors.userId}
           </p>
-        </div>
 
-        <p className="mt-2 text-sm text-red-600" id="userid-error">
-          {actionData?.errors.userId && actionData?.errors.userId}
-        </p>
-
-        <button
-          type="submit"
-          className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Add Post
-        </button>
+          <button
+            type="submit"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            {transition.state === "submitting" ? "Adding post..." : "Add post"}
+          </button>
+        </fieldset>
       </Form>
     </div>
   );
