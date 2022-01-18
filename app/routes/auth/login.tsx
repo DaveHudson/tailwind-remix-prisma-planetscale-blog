@@ -1,6 +1,6 @@
 import { ExclamationCircleIcon } from "@heroicons/react/outline";
 import { useActionData, json, useTransition, ActionFunction, Form } from "remix";
-import { db } from "~/utils/db.server";
+import { checkIfUserExists } from "~/utils/db/user.server";
 import { login, register, createUserSession } from "~/utils/session.server";
 
 function validateUsername(username: string) {
@@ -54,20 +54,13 @@ export const action: ActionFunction = async ({ request }) => {
     }
     case "register": {
       // Check if user exists
-      const userExists = await db.user.findFirst({
-        where: {
-          username,
-        },
-      });
-
+      const userExists = await checkIfUserExists(username);
       if (userExists) {
         return json({ ...userCredentials, errors: { username: `User ${username} already exists` } });
       }
 
       // Create user
-
       const user = await register({ username, password });
-
       if (!user) {
         return json({ ...userCredentials, formError: "Something went wrong" });
       }
