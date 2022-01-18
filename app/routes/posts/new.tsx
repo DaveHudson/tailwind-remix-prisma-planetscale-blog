@@ -1,50 +1,24 @@
 import { Link, redirect, useActionData, json } from "remix";
 import type { ActionFunction } from "remix";
-import { db } from "~/utils/db.server";
 import { getUser } from "~/utils/session.server";
-import invariant from "tiny-invariant";
-
-function validateTitle(title: string) {
-  if (typeof title !== "string" || title.length < 3) {
-    return "Title should be at least 3 characters long";
-  }
-}
-
-function validateBody(body: string) {
-  if (typeof body !== "string" || body.length < 10) {
-    return "Body should be at least 10 characters long";
-  }
-}
+import { createPost, CreatePostInputType } from "~/utils/db/post.server";
+import { Category } from "@prisma/client";
 
 export const action: ActionFunction = async ({ request }) => {
+  const user = await getUser(request);
+
   const form = await request.formData();
   const title = form.get("title");
   const body = form.get("body");
-  const user = await getUser(request);
+  const category = Category.ARTICLE;
+  const imageUrl = "";
+  const readingTime = "";
 
-  invariant(user?.id, "expected user id");
+  const fields = { title, body, category, imageUrl, readingTime, userId: user?.id } as CreatePostInputType;
 
-  if (typeof title !== "string") {
-    throw new Error(`Form not submmitted correctly`);
-  }
-  if (typeof body !== "string") {
-    throw new Error(`Form not submmitted correctly`);
-  }
+  const post = await createPost(fields);
 
-  const fields = { title, body };
-
-  const fieldErrors = {
-    title: validateTitle(title),
-    body: validateBody(body),
-  };
-
-  if (Object.values(fieldErrors).some(Boolean)) {
-    return json({ fieldErrors, fields }, { status: 400 });
-  }
-
-  const post = await db.post.create({ data: { ...fields, userId: user.id } });
-
-  return redirect(`/posts/${post.id}`);
+  return redirect(`/posts/${post}`);
 };
 
 export default function NewPost() {
