@@ -5,11 +5,9 @@ export default function Search() {
   let [searchParams] = useSearchParams();
   let searchQuery = searchParams.get("search") || "";
 
-  console.log(`searching for ${searchQuery}`);
-
   return (
     <div className="w-full sm:max-w-xs">
-      <Form reloadDocument method="get">
+      <Form reloadDocument method="get" action="/">
         <label htmlFor="search" className="sr-only">
           Search
         </label>
