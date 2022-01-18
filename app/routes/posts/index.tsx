@@ -11,7 +11,7 @@ export default function Posts() {
   const posts = useLoaderData<PostWithUser[]>();
 
   return (
-    <div className="mt-12 grid gap-16 pt-12 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-12">
+    <div className="mt-12 grid gap-16 pt-12 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-12 pb-12">
       {posts.map((post) => {
         return (
           <div key={post.title}>

@@ -44,21 +44,23 @@ export default function Post() {
   const transition = useTransition();
 
   return (
-    <div>
+    <div className="mt-12 pt-12 pb-12 prose">
       <h1>{post.title}</h1>
       <p>{post.body}</p>
       <Link to="/posts">Back</Link>
 
       {user?.id === post.userId && (
-        <Form method="post">
-          <input type="hidden" name="_method" value="delete" />
-          <button
-            type="submit"
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-          >
-            {transition.state !== "idle" ? "Deleting.." : "Delete"}
-          </button>
-        </Form>
+        <div className="pt-3">
+          <Form method="post">
+            <input type="hidden" name="_method" value="delete" />
+            <button
+              type="submit"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              {transition.state !== "idle" ? "Deleting.." : "Delete"}
+            </button>
+          </Form>
+        </div>
       )}
     </div>
   );
