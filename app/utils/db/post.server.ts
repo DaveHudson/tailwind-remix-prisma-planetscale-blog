@@ -1,5 +1,6 @@
 import { Post, User } from "@prisma/client";
 import { db } from "~/utils/db.server";
+import { marked } from "marked";
 
 export interface PostWithUser extends Post {
   user: User;
@@ -26,7 +27,14 @@ export async function getPost(postid: number) {
 
   if (!post) throw new Error("Post not found");
 
-  return post as PostWithUser;
+  const postHtml = marked(post.body);
+
+  const postData = {
+    ...post,
+    body: postHtml,
+  };
+
+  return postData as PostWithUser;
 }
 
 export async function createPost(fields: Post) {

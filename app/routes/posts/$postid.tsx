@@ -1,8 +1,9 @@
-import { useLoaderData, Link, useParams, redirect, useTransition, Form } from "remix";
+import { useLoaderData, Link, redirect, useTransition, Form } from "remix";
 import type { ActionFunction, LoaderFunction } from "remix";
 import { getUser } from "~/utils/session.server";
 import { deletePost, getPost } from "~/utils/db/post.server";
 import invariant from "tiny-invariant";
+import DOMPurify from "dompurify";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.postid, "expected params.postid");
@@ -46,9 +47,8 @@ export default function Post() {
   return (
     <div className="mt-12 pt-12 pb-12 prose">
       <h1>{post.title}</h1>
-      <p>{post.body}</p>
+      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.body) }} />
       <Link to="/posts">Back</Link>
-
       {user?.id === post.userId && (
         <div className="pt-3">
           <Form method="post">

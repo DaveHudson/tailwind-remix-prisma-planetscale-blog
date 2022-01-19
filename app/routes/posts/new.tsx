@@ -5,6 +5,14 @@ import { createPost } from "~/utils/db/post.server";
 import { Category, Post } from "@prisma/client";
 import { ExclamationCircleIcon } from "@heroicons/react/solid";
 import invariant from "tiny-invariant";
+import { useState } from "react";
+import { Tab } from "@headlessui/react";
+import { AtSymbolIcon, CodeIcon, LinkIcon } from "@heroicons/react/solid";
+import { marked } from "marked";
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
 
 function validateTitle(title: string) {
   if (typeof title !== "string" || title.length < 3) {
@@ -62,6 +70,8 @@ export default function NewPost() {
   const actionData = useActionData();
   const transition = useTransition();
 
+  const [text, setText] = useState("");
+
   return (
     <div>
       <p>This is for a new post</p>
@@ -96,27 +106,104 @@ export default function NewPost() {
             {actionData?.errors.title && actionData?.errors.title}
           </p>
 
-          <div>
-            <label htmlFor="body" className="block text-sm font-medium text-gray-700">
-              Add your post body
-            </label>
-            <div className="mt-1">
-              <textarea
-                rows={4}
-                name="body"
-                id="body"
-                className={`${
-                  actionData?.errors.title
-                    ? "block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
-                    : "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                }`}
-                defaultValue={actionData?.fields?.body}
-              />
-            </div>
-            <p className="mt-2 text-sm text-red-600" id="body-error">
-              {actionData?.errors.body && actionData?.errors.body}
-            </p>
-          </div>
+          <Tab.Group>
+            {({ selectedIndex }) => (
+              <>
+                <Tab.List className="flex items-center">
+                  <Tab
+                    className={({ selected }) =>
+                      classNames(
+                        selected
+                          ? "text-gray-900 bg-gray-100 hover:bg-gray-200"
+                          : "text-gray-500 hover:text-gray-900 bg-white hover:bg-gray-100",
+                        "px-3 py-1.5 border border-transparent text-sm font-medium rounded-md"
+                      )
+                    }
+                  >
+                    Write
+                  </Tab>
+                  <Tab
+                    className={({ selected }) =>
+                      classNames(
+                        selected
+                          ? "text-gray-900 bg-gray-100 hover:bg-gray-200"
+                          : "text-gray-500 hover:text-gray-900 bg-white hover:bg-gray-100",
+                        "ml-2 px-3 py-1.5 border border-transparent text-sm font-medium rounded-md"
+                      )
+                    }
+                  >
+                    Preview
+                  </Tab>
+
+                  {/* These buttons are here simply as examples and don't actually do anything. */}
+                  {selectedIndex === 0 ? (
+                    <div className="ml-auto flex items-center space-x-5">
+                      <div className="flex items-center">
+                        <button
+                          type="button"
+                          className="-m-2.5 w-10 h-10 rounded-full inline-flex items-center justify-center text-gray-400 hover:text-gray-500"
+                        >
+                          <span className="sr-only">Insert link</span>
+                          <LinkIcon className="h-5 w-5" aria-hidden="true" />
+                        </button>
+                      </div>
+                      <div className="flex items-center">
+                        <button
+                          type="button"
+                          className="-m-2.5 w-10 h-10 rounded-full inline-flex items-center justify-center text-gray-400 hover:text-gray-500"
+                        >
+                          <span className="sr-only">Insert code</span>
+                          <CodeIcon className="h-5 w-5" aria-hidden="true" />
+                        </button>
+                      </div>
+                      <div className="flex items-center">
+                        <button
+                          type="button"
+                          className="-m-2.5 w-10 h-10 rounded-full inline-flex items-center justify-center text-gray-400 hover:text-gray-500"
+                        >
+                          <span className="sr-only">Mention someone</span>
+                          <AtSymbolIcon className="h-5 w-5" aria-hidden="true" />
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                </Tab.List>
+                <Tab.Panels className="mt-2">
+                  <Tab.Panel className="p-0.5 -m-0.5 rounded-lg">
+                    <label htmlFor="body" className="sr-only">
+                      Body
+                    </label>
+                    <div>
+                      <textarea
+                        rows={5}
+                        name="body"
+                        id="body"
+                        className={`${
+                          actionData?.errors.title
+                            ? "block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                            : "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                        }`}
+                        defaultValue={text}
+                        onChange={(e) => setText(e.target.value)}
+                      />
+                    </div>
+                  </Tab.Panel>
+                  <Tab.Panel className="p-0.5 -m-0.5 rounded-lg">
+                    <div className="border-b">
+                      <div
+                        className="mx-px mt-px px-3 pt-2 pb-12 text-sm leading-5 text-gray-800 prose"
+                        dangerouslySetInnerHTML={{ __html: marked(text) }}
+                      ></div>
+                    </div>
+                  </Tab.Panel>
+                </Tab.Panels>
+              </>
+            )}
+          </Tab.Group>
+
+          <p className="mt-2 text-sm text-red-600" id="body-error">
+            {actionData?.errors.body && actionData?.errors.body}
+          </p>
 
           <p className="mt-2 text-sm text-red-600" id="userid-error">
             {actionData?.errors.userId && actionData?.errors.userId}
