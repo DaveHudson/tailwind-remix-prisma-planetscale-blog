@@ -2,6 +2,7 @@ import { Link, useLoaderData } from "remix";
 import type { LoaderFunction } from "remix";
 import dayjs from "dayjs";
 import { getPosts, PostWithUser } from "~/utils/db/post.server";
+import PostType from "~/components/posttype";
 
 export const loader: LoaderFunction = async () => {
   return getPosts();
@@ -16,10 +17,8 @@ export default function Posts() {
         return (
           <div key={post.title}>
             <div>
-              <a href={`${post.id}`} className="inline-block">
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                  {post.category}
-                </span>
+              <a href={`${post.id}`} className="inline-block" title="post type">
+                <PostType category={post.category} />
               </a>
             </div>
             <Link to={`${post.id}`} className="block mt-4" prefetch="intent">
