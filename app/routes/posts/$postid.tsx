@@ -47,6 +47,7 @@ export default function Post() {
   return (
     <div className="mt-12 pt-12 pb-12 prose">
       <h1>{post.title}</h1>
+      <p>{post.readingTime}</p>
       <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.body) }} />
       <Link to="/posts">Back</Link>
       {user?.id === post.userId && (
