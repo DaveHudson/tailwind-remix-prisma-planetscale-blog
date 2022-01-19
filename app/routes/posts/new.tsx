@@ -43,7 +43,6 @@ export const action: ActionFunction = async ({ request }) => {
     body: form.get("body"),
     category: Category.ARTICLE,
     imageUrl: "http",
-    readingTime: "3 mins",
     userId: user.id,
   } as Post;
 

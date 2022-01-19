@@ -6,6 +6,21 @@ export interface PostWithUser extends Post {
   user: User;
 }
 
+function calculateReadingTime(text: string) {
+  const words = text.split(" ").length;
+  const readingTimeMin = Number(words / 200).toFixed(1);
+  const readingTimeSecs = Number((words / 200).toFixed(3).substring(3)) * 0.6;
+  let finalReadingTime;
+
+  if (readingTimeSecs > 30) {
+    finalReadingTime = Math.round(Number(readingTimeMin));
+  } else {
+    finalReadingTime = readingTimeMin;
+  }
+
+  return `${finalReadingTime} min read`;
+}
+
 export async function getPosts() {
   const posts = await db.post.findMany({
     take: 20,
@@ -38,7 +53,12 @@ export async function getPost(postid: number) {
 }
 
 export async function createPost(fields: Post) {
-  const res = await db.post.create({ data: { ...fields, userId: fields.userId } });
+  const post = {
+    ...fields,
+    readingTime: calculateReadingTime(fields.body),
+  };
+
+  const res = await db.post.create({ data: { ...post, userId: post.userId } });
   return res.id;
 }
 
