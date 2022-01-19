@@ -45,24 +45,28 @@ export default function Post() {
   const transition = useTransition();
 
   return (
-    <div className="mt-12 pt-12 pb-12 prose">
-      <h1>{post.title}</h1>
-      <p>{post.readingTime}</p>
-      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.body) }} />
-      <Link to="/posts">Back</Link>
-      {user?.id === post.userId && (
-        <div className="pt-3">
-          <Form method="post">
-            <input type="hidden" name="_method" value="delete" />
-            <button
-              type="submit"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              {transition.state !== "idle" ? "Deleting.." : "Delete"}
-            </button>
-          </Form>
+    <div className="relative py-16 bg-white overflow-hidden">
+      <div className="relative px-4 sm:px-6 lg:px-8">
+        <div className="text-lg prose mx-auto">
+          <h1>{post.title}</h1>
+          <p>{post.readingTime}</p>
+          <div className="prose" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.body) }} />
+          <Link to="/posts">Back</Link>
+          {user?.id === post.userId && (
+            <div className="pt-3">
+              <Form method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <button
+                  type="submit"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  {transition.state !== "idle" ? "Deleting.." : "Delete"}
+                </button>
+              </Form>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
