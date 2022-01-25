@@ -34,3 +34,21 @@ npm run dev
 Open up [http://localhost:3000](http://localhost:3000) and you should be ready to go!
 
 If you're used to using the `vercel dev` command provided by [Vercel CLI](https://vercel.com/cli) instead, you can also use that, but it's not needed.
+
+## Prisma & Planetscale
+
+```bash
+npx prisma db seed
+
+npx prisma db push
+
+npx prisma studio
+
+pscale connect ddb-blog dev
+
+pscale branch list ddh-blog
+
+pscale database list
+
+pscale shell ddh-blog
+```
