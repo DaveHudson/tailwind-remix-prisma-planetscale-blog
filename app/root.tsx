@@ -17,7 +17,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { getUser } from "~/utils/session.server";
 import styles from "./tailwind.css";
-import Search from "./components/search";
+import { InputSearch } from "ui-kit-react-tailwind";
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
@@ -69,7 +69,10 @@ export function ErrorBoundary({ error }: { error: Error }) {
           <h1>There was an error</h1>
           <p>{error.message}</p>
           <hr />
-          <p>Hey, developer, you should replace this with what you want your users to see.</p>
+          <p>
+            Hey, developer, you should replace this with what you want your
+            users to see.
+          </p>
         </div>
       </Layout>
     </Document>
@@ -83,10 +86,17 @@ export function CatchBoundary() {
   let message;
   switch (caught.status) {
     case 401:
-      message = <p>Oops! Looks like you tried to visit a page that you do not have access to.</p>;
+      message = (
+        <p>
+          Oops! Looks like you tried to visit a page that you do not have access
+          to.
+        </p>
+      );
       break;
     case 404:
-      message = <p>Oops! Looks like you tried to visit a page that does not exist.</p>;
+      message = (
+        <p>Oops! Looks like you tried to visit a page that does not exist.</p>
+      );
       break;
 
     default:
@@ -105,7 +115,13 @@ export function CatchBoundary() {
   );
 }
 
-function Document({ children, title }: { children: React.ReactNode; title?: string }) {
+function Document({
+  children,
+  title,
+}: {
+  children: React.ReactNode;
+  title?: string;
+}) {
   return (
     <html lang="en">
       <head>
@@ -132,10 +148,10 @@ function Layout({ children }: { children: React.ReactNode }) {
     <Disclosure as="header" className="bg-white shadow">
       {({ open }) => (
         <>
-          <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:divide-y lg:divide-gray-200 lg:px-8">
-            <div className="relative h-16 flex justify-between">
-              <div className="relative z-10 px-2 flex lg:px-0">
-                <div className="flex-shrink-0 flex items-center">
+          <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:divide-y lg:divide-gray-200 lg:px-8">
+            <div className="relative flex h-16 justify-between">
+              <div className="relative z-10 flex px-2 lg:px-0">
+                <div className="flex flex-shrink-0 items-center">
                   <img
                     className="block h-8 w-auto"
                     src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
@@ -143,12 +159,16 @@ function Layout({ children }: { children: React.ReactNode }) {
                   />
                 </div>
               </div>
-              <div className="relative z-0 flex-1 px-2 flex items-center justify-center sm:absolute sm:inset-0">
-                <Search />
+              <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
+                <InputSearch
+                  name="search"
+                  defaultValue=""
+                  onChange={(e) => console.log(e)}
+                />
               </div>
               <div className="relative z-10 flex items-center lg:hidden">
                 {/* Mobile menu button */}
-                <Disclosure.Button className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                   <span className="sr-only">Open menu</span>
                   {open ? (
                     <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -160,18 +180,22 @@ function Layout({ children }: { children: React.ReactNode }) {
               <div className="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center">
                 <button
                   type="button"
-                  className="flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
 
                 {user ? (
-                  <Menu as="div" className="flex-shrink-0 relative ml-4">
+                  <Menu as="div" className="relative ml-4 flex-shrink-0">
                     <div>
-                      <Menu.Button className="bg-white rounded-full flex focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                      <Menu.Button className="flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         <span className="sr-only">Open user menu</span>
-                        <img className="h-8 w-8 rounded-full" src={user.profileUrl} alt="" />
+                        <img
+                          className="h-8 w-8 rounded-full"
+                          src={user.profileUrl}
+                          alt=""
+                        />
                       </Menu.Button>
                     </div>
                     <Transition
@@ -183,13 +207,15 @@ function Layout({ children }: { children: React.ReactNode }) {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none">
+                      <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         {userNavigation.map((item) => (
                           <Menu.Item key={item.name}>
                             {({ active }) => (
                               <Link
                                 to={item.href}
-                                className={`${active ? "bg-gray-100" : ""} block py-2 px-4 text-sm text-gray-700`}
+                                className={`${
+                                  active ? "bg-gray-100" : ""
+                                } block py-2 px-4 text-sm text-gray-700`}
                                 prefetch="intent"
                               >
                                 {item.name}
@@ -198,7 +224,10 @@ function Layout({ children }: { children: React.ReactNode }) {
                           </Menu.Item>
                         ))}
                         <form action="/auth/logout" method="POST">
-                          <button type="submit" className={`bg-gray-100" block py-2 px-4 text-sm text-gray-700`}>
+                          <button
+                            type="submit"
+                            className={`bg-gray-100" block py-2 px-4 text-sm text-gray-700`}
+                          >
                             Logout
                           </button>
                         </form>
@@ -212,15 +241,20 @@ function Layout({ children }: { children: React.ReactNode }) {
                 )}
               </div>
             </div>
-            <nav className="hidden lg:py-2 lg:flex lg:space-x-8" aria-label="Global">
+            <nav
+              className="hidden lg:flex lg:space-x-8 lg:py-2"
+              aria-label="Global"
+            >
               {navigation.map((item) => (
                 <NavLink
                   key={item.name}
                   to={item.href}
                   className={({ isActive }) =>
                     `${
-                      isActive ? "bg-gray-100 text-gray-900" : "text-gray-900 hover:bg-gray-50 hover:text-gray-900"
-                    } rounded-md py-2 px-3 inline-flex items-center text-sm font-medium`
+                      isActive
+                        ? "bg-gray-100 text-gray-900"
+                        : "text-gray-900 hover:bg-gray-50 hover:text-gray-900"
+                    } inline-flex items-center rounded-md py-2 px-3 text-sm font-medium`
                   }
                   aria-current={item.current ? "page" : undefined}
                   prefetch="intent"
@@ -233,14 +267,16 @@ function Layout({ children }: { children: React.ReactNode }) {
           </div>
 
           <Disclosure.Panel as="nav" className="lg:hidden" aria-label="Global">
-            <div className="pt-2 pb-3 px-2 space-y-1">
+            <div className="space-y-1 px-2 pt-2 pb-3">
               {navigation.map((item) => (
                 <Disclosure.Button
                   key={item.name}
                   as="a"
                   href={item.href}
                   className={`${
-                    item.current ? "bg-gray-100 text-gray-900" : "text-gray-900 hover:bg-gray-50 hover:text-gray-900"
+                    item.current
+                      ? "bg-gray-100 text-gray-900"
+                      : "text-gray-900 hover:bg-gray-50 hover:text-gray-900"
                   } block rounded-md py-2 px-3 text-base font-medium`}
                   aria-current={item.current ? "page" : undefined}
                 >
@@ -249,23 +285,31 @@ function Layout({ children }: { children: React.ReactNode }) {
               ))}
             </div>
             <div className="border-t border-gray-200 pt-4 pb-3">
-              <div className="px-4 flex items-center">
+              <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
-                  <img className="h-10 w-10 rounded-full" src={user?.imageUrl} alt="" />
+                  <img
+                    className="h-10 w-10 rounded-full"
+                    src={user?.imageUrl}
+                    alt=""
+                  />
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">{user?.name}</div>
-                  <div className="text-sm font-medium text-gray-500">{user?.email}</div>
+                  <div className="text-base font-medium text-gray-800">
+                    {user?.name}
+                  </div>
+                  <div className="text-sm font-medium text-gray-500">
+                    {user?.email}
+                  </div>
                 </div>
                 <button
                   type="button"
-                  className="ml-auto flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
-              <div className="mt-3 px-2 space-y-1">
+              <div className="mt-3 space-y-1 px-2">
                 {userNavigation.map((item) => (
                   <Disclosure.Button
                     key={item.name}

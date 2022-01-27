@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Tab } from "@headlessui/react";
 import { AtSymbolIcon, CodeIcon, LinkIcon } from "@heroicons/react/solid";
 import { marked } from "marked";
+import { ChatContainer } from "ui-kit-react-tailwind";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -75,6 +76,8 @@ export default function NewPost() {
     <div>
       <p>This is for a new post</p>
       <Link to="/posts">Back</Link>
+      {/* <InputEmail name="email" label="Your email" defaultValue="" placeholder="Your email address" /> */}
+      <ChatContainer />
 
       <Form method="post">
         <fieldset disabled={transition.state === "submitting"}>
