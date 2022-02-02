@@ -1,4 +1,4 @@
-import { Post, User } from "@prisma/client";
+import { Post, Prisma, User } from "@prisma/client";
 import { db } from "~/utils/db.server";
 import { marked } from "marked";
 
@@ -55,6 +55,7 @@ export async function getPost(postid: number) {
 export async function createPost(fields: Post) {
   const post = {
     ...fields,
+    tags: fields.tags as Prisma.JsonArray,
     readingTime: calculateReadingTime(fields.body),
   };
 
