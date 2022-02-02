@@ -280,37 +280,47 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                   </Disclosure.Button>
                 ))}
               </div>
-              <div className="border-t border-gray-200 pt-4 pb-3">
-                <div className="flex items-center px-4">
-                  <div className="flex-shrink-0">
-                    <img
-                      className="h-10 w-10 rounded-full"
-                      src={user?.profileUrl}
-                      alt=""
-                    />
+              {user ? (
+                <div className="border-t border-gray-200 pt-4 pb-3">
+                  <div className="flex items-center px-4">
+                    <div className="flex-shrink-0">
+                      <img
+                        className="h-10 w-10 rounded-full"
+                        src={user?.profileUrl}
+                        alt=""
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <div className="text-base font-medium text-light dark:text-dark">
+                        {user?.name}
+                      </div>
+                      <div className="text-sm font-medium text-light-accent dark:text-dark-accent">
+                        {user?.email}
+                      </div>
+                    </div>
                   </div>
-                  <div className="ml-3">
-                    <div className="text-base font-medium text-light dark:text-dark">
-                      {user?.name}
-                    </div>
-                    <div className="text-sm font-medium text-light-accent dark:text-dark-accent">
-                      {user?.email}
-                    </div>
+                  <div className="mt-3 space-y-1 px-2">
+                    {userNavigation.map((item) => (
+                      <Disclosure.Button
+                        key={item.name}
+                        as="a"
+                        href={item.href}
+                        className="block rounded-md py-2 px-3 text-base font-medium text-light hover:bg-gray-50 hover:text-gray-900 dark:text-dark"
+                      >
+                        {item.name}
+                      </Disclosure.Button>
+                    ))}
                   </div>
                 </div>
-                <div className="mt-3 space-y-1 px-2">
-                  {userNavigation.map((item) => (
-                    <Disclosure.Button
-                      key={item.name}
-                      as="a"
-                      href={item.href}
-                      className="block rounded-md py-2 px-3 text-base font-medium text-light hover:bg-gray-50 hover:text-gray-900 dark:text-dark"
-                    >
-                      {item.name}!!
-                    </Disclosure.Button>
-                  ))}
-                </div>
-              </div>
+              ) : (
+                <Link
+                  to="/auth/signin"
+                  prefetch="intent"
+                  className="block rounded-md py-2 px-3 text-base font-medium text-light dark:text-dark"
+                >
+                  Sign in
+                </Link>
+              )}
             </Disclosure.Panel>
           </>
         )}
