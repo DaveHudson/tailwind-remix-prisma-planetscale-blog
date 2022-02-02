@@ -12,14 +12,15 @@ export default function Index() {
     {
       id: 2,
       title: "Tailwind CSS",
-      description: "Utility first CSS for speed and maintainable styles",
+      description:
+        "A utility-first CSS framework to rapidly build modern websites without ever leaving HTML",
       url: "/tags/tailwind",
     },
     {
       id: 3,
       title: "Prisma",
       description:
-        "Typed Database ORM layer with support for multiple databases",
+        "TypeScript ORM for PostgreSQL MySQL & MongoDB to build faster and with fewer errors",
       url: "/tags/prisma",
     },
   ];
