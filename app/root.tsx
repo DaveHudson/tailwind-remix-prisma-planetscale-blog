@@ -343,7 +343,7 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
           </div>
           <div className="mt-8 md:order-1 md:mt-0">
             <p className="text-center text-base text-gray-400">
-              &copy; 2022 Applification Ltd.
+              &copy; {new Date().getFullYear()} Applification Ltd.
             </p>
           </div>
         </div>
