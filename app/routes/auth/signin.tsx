@@ -124,7 +124,7 @@ export default function Login() {
                   name="loginType"
                   type="radio"
                   defaultChecked={accountMethod.id === "login"}
-                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="h-4 w-4 border-gray-300 text-sky-600 focus:ring-sky-500"
                 />
                 <label
                   htmlFor={accountMethod.id}
@@ -151,7 +151,7 @@ export default function Login() {
                 className={`${
                   actionData?.errors.username
                     ? "block w-full rounded-md border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"
-                    : "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    : "block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                 }`}
                 defaultValue={actionData?.fields?.username}
                 aria-invalid="true"
@@ -186,7 +186,7 @@ export default function Login() {
                 className={`${
                   actionData?.errors.password
                     ? "block w-full rounded-md border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"
-                    : "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    : "block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                 }`}
                 defaultValue={actionData?.fields?.password}
                 aria-invalid="true"
@@ -210,7 +210,7 @@ export default function Login() {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="mt-3 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="mt-3 inline-flex items-center rounded-md border border-transparent bg-sky-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
               >
                 {transition.state !== "idle" ? "Logging in..." : "Login"}
               </button>

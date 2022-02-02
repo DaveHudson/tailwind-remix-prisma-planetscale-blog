@@ -157,7 +157,7 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                       <input
                         id="search"
                         name="search"
-                        className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm placeholder-gray-500 focus:border-indigo-500 focus:text-gray-900 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                        className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm placeholder-gray-500 focus:border-sky-500 focus:text-gray-900 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
                         placeholder="Search"
                         type="search"
                       />
@@ -166,7 +166,7 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                 </div>
                 <div className="relative z-10 flex items-center lg:hidden">
                   {/* Mobile menu button */}
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500">
                     <span className="sr-only">Open menu</span>
                     {open ? (
                       <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -179,7 +179,7 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                   {user ? (
                     <Menu as="div" className="relative ml-4 flex-shrink-0">
                       <div>
-                        <Menu.Button className="flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <Menu.Button className="flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
                           <span className="sr-only">Open user menu</span>
                           <img
                             className="h-8 w-8 rounded-full"
@@ -343,7 +343,7 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
           </div>
           <div className="mt-8 md:order-1 md:mt-0">
             <p className="text-center text-base text-gray-400">
-              &copy; 2022 Applification Ltd.
+              &copy; {new Date().getFullYear()} Applification Ltd.
             </p>
           </div>
         </div>

@@ -76,33 +76,41 @@ export default function NewPost() {
     <Form method="post" className="space-y-8 divide-y divide-gray-200">
       <div className="space-y-8 divide-y divide-gray-200">
         <div>
-          <h3 className="text-lg leading-6 font-medium text-light dark:text-dark">New Post</h3>
+          <h3 className="text-lg font-medium leading-6 text-light dark:text-dark">
+            New Post
+          </h3>
           <p className="mt-1 text-sm text-light-accent dark:text-dark-accent">
             Use this form to create a new blog post using markdown syntax.
           </p>
         </div>
 
         <fieldset disabled={transition.state === "submitting"} className="pt-6">
-          <label htmlFor="title" className="block text-sm font-medium text-light-accent dark:text-dark-accent">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-light-accent dark:text-dark-accent"
+          >
             Title
           </label>
-          <div className="mt-1 relative rounded-md shadow-sm">
+          <div className="relative mt-1 rounded-md shadow-sm">
             <input
               type="text"
               name="title"
               id="title"
               className={`${
                 actionData?.errors.title
-                  ? "block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
-                  : "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  ? "block w-full rounded-md border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"
+                  : "block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
               }`}
               defaultValue={actionData?.fields?.title}
               aria-invalid="true"
               aria-describedby="title-error"
             />
             {actionData?.errors.title && (
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <ExclamationCircleIcon
+                  className="h-5 w-5 text-red-500"
+                  aria-hidden="true"
+                />
               </div>
             )}
           </div>
@@ -119,9 +127,9 @@ export default function NewPost() {
                       className={({ selected }) =>
                         classNames(
                           selected
-                            ? "text-gray-900 bg-gray-100 hover:bg-gray-200"
-                            : "text-gray-500 hover:text-gray-900 bg-white hover:bg-gray-100",
-                          "px-3 py-1.5 border border-transparent text-sm font-medium rounded-md"
+                            ? "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                            : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-900",
+                          "rounded-md border border-transparent px-3 py-1.5 text-sm font-medium"
                         )
                       }
                     >
@@ -131,9 +139,9 @@ export default function NewPost() {
                       className={({ selected }) =>
                         classNames(
                           selected
-                            ? "text-gray-900 bg-gray-100 hover:bg-gray-200"
-                            : "text-gray-500 hover:text-gray-900 bg-white hover:bg-gray-100",
-                          "ml-2 px-3 py-1.5 border border-transparent text-sm font-medium rounded-md"
+                            ? "bg-gray-100 text-gray-900 hover:bg-gray-200"
+                            : "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-900",
+                          "ml-2 rounded-md border border-transparent px-3 py-1.5 text-sm font-medium"
                         )
                       }
                     >
@@ -146,7 +154,7 @@ export default function NewPost() {
                         <div className="flex items-center">
                           <button
                             type="button"
-                            className="-m-2.5 w-10 h-10 rounded-full inline-flex items-center justify-center text-gray-400 hover:text-gray-500"
+                            className="-m-2.5 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
                           >
                             <span className="sr-only">Insert link</span>
                             <LinkIcon className="h-5 w-5" aria-hidden="true" />
@@ -155,7 +163,7 @@ export default function NewPost() {
                         <div className="flex items-center">
                           <button
                             type="button"
-                            className="-m-2.5 w-10 h-10 rounded-full inline-flex items-center justify-center text-gray-400 hover:text-gray-500"
+                            className="-m-2.5 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
                           >
                             <span className="sr-only">Insert code</span>
                             <CodeIcon className="h-5 w-5" aria-hidden="true" />
@@ -164,17 +172,20 @@ export default function NewPost() {
                         <div className="flex items-center">
                           <button
                             type="button"
-                            className="-m-2.5 w-10 h-10 rounded-full inline-flex items-center justify-center text-gray-400 hover:text-gray-500"
+                            className="-m-2.5 inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
                           >
                             <span className="sr-only">Mention someone</span>
-                            <AtSymbolIcon className="h-5 w-5" aria-hidden="true" />
+                            <AtSymbolIcon
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            />
                           </button>
                         </div>
                       </div>
                     ) : null}
                   </Tab.List>
                   <Tab.Panels className="mt-2">
-                    <Tab.Panel className="p-0.5 -m-0.5 rounded-lg">
+                    <Tab.Panel className="-m-0.5 rounded-lg p-0.5">
                       <label htmlFor="body" className="sr-only">
                         Body
                       </label>
@@ -185,18 +196,18 @@ export default function NewPost() {
                           id="body"
                           className={`${
                             actionData?.errors.title
-                              ? "block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
-                              : "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                              ? "block w-full rounded-md border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"
+                              : "block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                           }`}
                           defaultValue={text}
                           onChange={(e) => setText(e.target.value)}
                         />
                       </div>
                     </Tab.Panel>
-                    <Tab.Panel className="p-0.5 -m-0.5 rounded-lg">
+                    <Tab.Panel className="-m-0.5 rounded-lg p-0.5">
                       <div className="border-b">
                         <div
-                          className="mx-px mt-px px-3 pt-2 pb-12 text-sm leading-5 prose prose-pink dark:prose-invert"
+                          className="prose prose-pink mx-px mt-px px-3 pt-2 pb-12 text-sm leading-5 dark:prose-invert"
                           dangerouslySetInnerHTML={{ __html: marked(text) }}
                         ></div>
                       </div>
@@ -219,13 +230,13 @@ export default function NewPost() {
             <div className="flex justify-end">
               <button
                 type="button"
-                className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="ml-3 inline-flex items-center rounded-md border border-transparent bg-sky-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
               >
                 {transition.state !== "idle" ? "Adding post..." : "Add post"}
               </button>
