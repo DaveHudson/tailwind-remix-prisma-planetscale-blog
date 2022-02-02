@@ -1,9 +1,21 @@
-import { Link, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch } from "remix";
+import {
+  Link,
+  Links,
+  LiveReload,
+  LoaderFunction,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useCatch,
+  useLoaderData,
+} from "remix";
 import { Fragment, SVGProps } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { SearchIcon } from "@heroicons/react/solid";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import type { MetaFunction } from "remix";
+import { getUser } from "./utils/session.server";
 import styles from "./tailwind.css";
 
 export function links() {
@@ -17,6 +29,16 @@ export const meta: MetaFunction = () => {
   return { title: "Applification" };
 };
 
+export const loader: LoaderFunction = async ({ request }) => {
+  const data = await getUser(request);
+
+  if (!data) {
+    return null;
+  }
+
+  return data;
+};
+
 export default function App() {
   return (
     <Document>
@@ -27,7 +49,13 @@ export default function App() {
   );
 }
 
-function Document({ children, title }: { children: React.ReactNode; title?: string }) {
+function Document({
+  children,
+  title,
+}: {
+  children: React.ReactNode;
+  title?: string;
+}) {
   return (
     <html lang="en">
       <head>
@@ -48,24 +76,16 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
 }
 
 function Layout({ children }: React.PropsWithChildren<{}>) {
-  const user = {
-    name: "Tom Cook",
-    email: "tom@example.com",
-    imageUrl:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  };
+  const user = useLoaderData();
+
   const navigation = [
     { name: "Home", href: "/", current: true },
     { name: "Posts", href: "/posts", current: false },
-    { name: "Projects", href: "/projects", current: false },
     { name: "Contact", href: "/contact", current: false },
   ];
   const userNavigation = [
-    { name: "Login", href: "/auth/login" },
     { name: "New Post", href: "/posts/new" },
-    { name: "Your Profile", href: "#" },
     { name: "Settings", href: "#" },
-    { name: "Sign out", href: "#" },
   ];
 
   const footernavigation = [
@@ -109,32 +129,35 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <Disclosure as="header">
         {({ open }) => (
           <>
-            <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:divide-y lg:divide-gray-200 lg:px-8">
-              <div className="relative h-16 flex justify-between">
-                <div className="relative z-10 px-2 flex lg:px-0">
+            <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:divide-y lg:divide-gray-200 lg:px-8">
+              <div className="relative flex h-16 justify-between">
+                <div className="relative z-10 flex px-2 lg:px-0">
                   <div className="flex-shrink-0 items-center">
                     <Link to="/">
                       <ApplificationLogo />
                     </Link>
                   </div>
                 </div>
-                <div className="relative z-0 flex-1 px-2 flex items-center justify-center sm:absolute sm:inset-0">
+                <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
                   <div className="w-full sm:max-w-xs">
                     <label htmlFor="search" className="sr-only">
                       Search
                     </label>
                     <div className="relative">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-                        <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <SearchIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
                       </div>
                       <input
                         id="search"
                         name="search"
-                        className="block w-full bg-white border border-gray-300 rounded-md py-2 pl-10 pr-3 text-sm placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="block w-full rounded-md border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm placeholder-gray-500 focus:border-indigo-500 focus:text-gray-900 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                         placeholder="Search"
                         type="search"
                       />
@@ -143,7 +166,7 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                 </div>
                 <div className="relative z-10 flex items-center lg:hidden">
                   {/* Mobile menu button */}
-                  <Disclosure.Button className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                     <span className="sr-only">Open menu</span>
                     {open ? (
                       <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -153,45 +176,69 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                   </Disclosure.Button>
                 </div>
                 <div className="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center">
-                  {/* Profile dropdown */}
-                  <Menu as="div" className="flex-shrink-0 relative ml-4">
-                    <div>
-                      <Menu.Button className="bg-white rounded-full flex focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <span className="sr-only">Open user menu</span>
-                        <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
-                      </Menu.Button>
-                    </div>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
+                  {user ? (
+                    <Menu as="div" className="relative ml-4 flex-shrink-0">
+                      <div>
+                        <Menu.Button className="flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                          <span className="sr-only">Open user menu</span>
+                          <img
+                            className="h-8 w-8 rounded-full"
+                            src={user?.profileUrl}
+                            alt=""
+                          />
+                        </Menu.Button>
+                      </div>
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          {userNavigation.map((item) => (
+                            <Menu.Item key={item.name}>
+                              {({ active }) => (
+                                <a
+                                  href={item.href}
+                                  className={classNames(
+                                    active ? "bg-gray-100" : "",
+                                    "block py-2 px-4 text-sm text-gray-700"
+                                  )}
+                                >
+                                  {item.name}
+                                </a>
+                              )}
+                            </Menu.Item>
+                          ))}
+                          <form action="/auth/signout" method="POST">
+                            <button
+                              type="submit"
+                              className={`bg-gray-100" block py-2 px-4 text-sm text-gray-700`}
+                            >
+                              Sign out
+                            </button>
+                          </form>
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>
+                  ) : (
+                    <Link
+                      to="/auth/signin"
+                      prefetch="intent"
+                      className="text-light dark:text-dark"
                     >
-                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none">
-                        {userNavigation.map((item) => (
-                          <Menu.Item key={item.name}>
-                            {({ active }) => (
-                              <a
-                                href={item.href}
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block py-2 px-4 text-sm text-gray-700"
-                                )}
-                              >
-                                {item.name}
-                              </a>
-                            )}
-                          </Menu.Item>
-                        ))}
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
+                      Sign in
+                    </Link>
+                  )}
                 </div>
               </div>
-              <nav className="hidden lg:py-3 lg:flex lg:space-x-8 lg:justify-center" aria-label="Global">
+              <nav
+                className="hidden lg:flex lg:justify-center lg:space-x-8 lg:py-3"
+                aria-label="Global"
+              >
                 {navigation.map((item) => (
                   <Link
                     to={`${item.href}`}
@@ -199,8 +246,8 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                     className={classNames(
                       item.current
                         ? "bg-gray-100 text-light dark:text-dark"
-                        : "text-light dark:text-dark hover:bg-gray-50 hover:text-gray-900",
-                      "rounded-md py-2 px-3 inline-flex items-center text-sm font-medium"
+                        : "text-light hover:bg-gray-50 hover:text-gray-900 dark:text-dark",
+                      "inline-flex items-center rounded-md py-2 px-3 text-sm font-medium"
                     )}
                     aria-current={item.current ? "page" : undefined}
                   >
@@ -210,8 +257,12 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
               </nav>
             </div>
 
-            <Disclosure.Panel as="nav" className="lg:hidden" aria-label="Global">
-              <div className="pt-2 pb-3 px-2 space-y-1">
+            <Disclosure.Panel
+              as="nav"
+              className="lg:hidden"
+              aria-label="Global"
+            >
+              <div className="space-y-1 px-2 pt-2 pb-3">
                 {navigation.map((item) => (
                   <Disclosure.Button
                     key={item.name}
@@ -220,7 +271,7 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                     className={classNames(
                       item.current
                         ? "bg-gray-100 text-light dark:text-dark"
-                        : "text-light dark:text-dark hover:bg-gray-50 hover:text-gray-900",
+                        : "text-light hover:bg-gray-50 hover:text-gray-900 dark:text-dark",
                       "block rounded-md py-2 px-3 text-base font-medium"
                     )}
                     aria-current={item.current ? "page" : undefined}
@@ -230,22 +281,30 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
                 ))}
               </div>
               <div className="border-t border-gray-200 pt-4 pb-3">
-                <div className="px-4 flex items-center">
+                <div className="flex items-center px-4">
                   <div className="flex-shrink-0">
-                    <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                    <img
+                      className="h-10 w-10 rounded-full"
+                      src={user?.profileUrl}
+                      alt=""
+                    />
                   </div>
                   <div className="ml-3">
-                    <div className="text-base font-medium text-light dark:text-dark">{user.name}</div>
-                    <div className="text-sm font-medium text-light-accent dark:text-dark-accent">{user.email}</div>
+                    <div className="text-base font-medium text-light dark:text-dark">
+                      {user?.name}
+                    </div>
+                    <div className="text-sm font-medium text-light-accent dark:text-dark-accent">
+                      {user?.email}
+                    </div>
                   </div>
                 </div>
-                <div className="mt-3 px-2 space-y-1">
+                <div className="mt-3 space-y-1 px-2">
                   {userNavigation.map((item) => (
                     <Disclosure.Button
                       key={item.name}
                       as="a"
                       href={item.href}
-                      className="block rounded-md py-2 px-3 text-base font-medium text-light dark:text-dark hover:bg-gray-50 hover:text-gray-900"
+                      className="block rounded-md py-2 px-3 text-base font-medium text-light hover:bg-gray-50 hover:text-gray-900 dark:text-dark"
                     >
                       {item.name}!!
                     </Disclosure.Button>
@@ -258,17 +317,24 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
       </Disclosure>
       {children}
       <footer>
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
+        <div className="mx-auto max-w-7xl py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
           <div className="flex justify-center space-x-6 md:order-2">
             {footernavigation.map((item) => (
-              <a key={item.name} href={item.href} target="_blank" className="text-gray-400 hover:text-gray-500">
+              <a
+                key={item.name}
+                href={item.href}
+                target="_blank"
+                className="text-gray-400 hover:text-gray-500"
+              >
                 <span className="sr-only">{item.name}</span>
                 <item.icon className="h-6 w-6" aria-hidden="true" />
               </a>
             ))}
           </div>
-          <div className="mt-8 md:mt-0 md:order-1">
-            <p className="text-center text-base text-gray-400">&copy; 2022 Applification Ltd.</p>
+          <div className="mt-8 md:order-1 md:mt-0">
+            <p className="text-center text-base text-gray-400">
+              &copy; 2022 Applification Ltd.
+            </p>
           </div>
         </div>
       </footer>
@@ -282,10 +348,17 @@ export function CatchBoundary() {
   let message;
   switch (caught.status) {
     case 401:
-      message = <p>Oops! Looks like you tried to visit a page that you do not have access to.</p>;
+      message = (
+        <p>
+          Oops! Looks like you tried to visit a page that you do not have access
+          to.
+        </p>
+      );
       break;
     case 404:
-      message = <p>Oops! Looks like you tried to visit a page that does not exist.</p>;
+      message = (
+        <p>Oops! Looks like you tried to visit a page that does not exist.</p>
+      );
       break;
 
     default:
@@ -305,7 +378,6 @@ export function CatchBoundary() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error);
   return (
     <Document title="Error!">
       <Layout>
@@ -313,7 +385,10 @@ export function ErrorBoundary({ error }: { error: Error }) {
           <h1>There was an error</h1>
           <p>{error.message}</p>
           <hr />
-          <p>Hey, developer, you should replace this with what you want your users to see.</p>
+          <p>
+            Hey, developer, you should replace this with what you want your
+            users to see.
+          </p>
         </div>
       </Layout>
     </Document>
@@ -329,7 +404,7 @@ function ApplificationLogo(props: React.ComponentPropsWithoutRef<"svg">) {
       width="73.400025"
       height="34.2"
       viewBox="0 0 734 342"
-      className="fill-[#303131] dark:fill-[#FAFAFA] mt-4"
+      className="mt-4 fill-[#303131] dark:fill-[#FAFAFA]"
       fill="none"
     >
       <path d="M262 11.7c-9.1 3.2-15.8 9.2-20.8 18.7l-2.7 5.1v271l3.4 6.3c6 11 15.6 17.7 27.9 19.3 9.5 1.2 190 1.1 198.6-.1 12.9-1.9 22.8-9.2 28.5-21l2.6-5.5v-269l-2.9-5.9c-3.6-7.3-9.6-13.5-16.8-17.3l-5.3-2.8-104-.2c-92.6-.2-104.5-.1-108.5 1.4zM455 165v110H283V55h172v110zm-78 122.5c13.5 7 10.5 28.1-4.5 31.5-10.1 2.3-20.4-6.4-20.5-17 0-4.5 3.6-10.8 7.9-13.7 4.1-2.7 12.6-3.1 17.1-.8z" />
