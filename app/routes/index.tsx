@@ -23,6 +23,13 @@ export default function Index() {
         "TypeScript ORM for PostgreSQL MySQL & MongoDB to build faster and with fewer errors",
       url: "/tags/prisma",
     },
+    {
+      id: 4,
+      title: "Cypress + Testing Library",
+      description:
+        "Fast, easy and reliable testing for anything that runs in a browser",
+      url: "/tags/cypress",
+    },
   ];
 
   return (
